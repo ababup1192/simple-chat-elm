@@ -1,8 +1,8 @@
 module Main exposing (..)
 
-import Html exposing (..)
-import Html.Events exposing (..)
-import Html.Attributes exposing (..)
+import Html exposing (Html, Attribute, program, div, p, input, ul, li, span, text)
+import Html.Events exposing (onInput, onClick, on, keyCode)
+import Html.Attributes exposing (id, class, value, placeholder)
 import Task
 import Dom.Scroll as Scroll
 import Json.Decode as Json
