@@ -47,7 +47,7 @@ type Msg
     = NoOp
     | NewName String
     | NewContent String
-    | ContentKeyDown Int
+    | PostContent Int
     | EditStart Int String
     | NewEdit String
     | EditEnd Int
@@ -71,9 +71,11 @@ update msg ({ name, content, messages, edited, editContent } as model) =
         NewContent content ->
             ( { model | content = content }, Cmd.none )
 
-        ContentKeyDown key ->
+        PostContent key ->
             if key == 13 && String.isEmpty content == False then
-                ( { model | messages = { name = name, content = content } :: messages, content = "", edited = Nothing }, Cmd.none )
+                ( { model | messages = { name = name, content = content } :: messages, content = "", edited = Nothing }
+                , Task.perform identity <| Task.succeed MessagesScroll
+                )
             else
                 ( model, Cmd.none )
 
@@ -149,7 +151,7 @@ view { name, content, messages, edited, editContent } =
                 [ input
                     [ placeholder "new message..."
                     , value content
-                    , onKeyDown ContentKeyDown
+                    , onKeyDown PostContent
                     , onInput NewContent
                     ]
                     []
